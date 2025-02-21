@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+
 const Protected = () => {
   const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProtectedData = async () => {
       const token = localStorage.getItem("token");
+
       if (!token) {
-        alert("Please login first");
+        setError("Please login first");
         return;
       }
 
@@ -18,8 +21,10 @@ const Protected = () => {
           },
         });
         setData(response.data);
+        setError(null);
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {
-        alert("Access denied or invalid token", err);
+        setError("Access denied or invalid token");
       }
     };
 
@@ -28,6 +33,7 @@ const Protected = () => {
   return (
     <div>
       <h2>Protected Data</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       {data ? (
         <div>
           <p>{data.message}</p>

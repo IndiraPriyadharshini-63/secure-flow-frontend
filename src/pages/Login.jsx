@@ -5,6 +5,7 @@ import { useState } from "react";
 const Login = ({ setAuthToken }) => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,9 +17,11 @@ const Login = ({ setAuthToken }) => {
       const token = response.data.token;
       setAuthToken(token);
       localStorage.setItem("token", token);
+      setError("");
       alert("Logged in successfully");
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      alert("Login failed", error);
+      setError("Login failed");
     }
   };
   return (
@@ -39,6 +42,7 @@ const Login = ({ setAuthToken }) => {
         />
         <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
